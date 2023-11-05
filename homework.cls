@@ -2,76 +2,36 @@
 \ProvidesExplClass{homework}{2023-11-04}{0.1}{Class for writing math homeworks}
 \prop_gput:Nnn \g_msg_module_type_prop { homework } { Class }
 
-%%% TeX engine check
-\RequirePackage{expl3}
-\RequirePackage{iftex}
-
-%%% abort if not LuaLaTeX or XeLaTeX
-\msg_new:nnnn { homework } { compiler-compatibility } { Incompatible~compiler~detected! } { Please~use~either~LuaLaTeX~or~XeLaTeX }
-\ifluatex{}
-\else\ifxetex{}
-\else
-\msg_fatal:nn { homework } { compiler-compatibility }
-\fi
-\fi
-
 \RequirePackage{l3keys2e}
 
 \keys_define:nn { homework }
 {
-    %tikz    .bool_set:N = \l_homework_tikz_bool,
-    %tikz    .initial:n = false,
-    %tikz    .default:n = true,
-    tikz    .code:n = { \homework_import_tikz },
-    language .code:n = { \str_gset:Nn \l_homework_language_str {#1} },
-    language .initial:n = {english},
-    language .value_required:n = true,
-    %class    .tl_gset:N = \g__wrapper_class_tl,
-    %class    .initial:n = scrartcl,
-    %class    .value_required:n = true,
+    tikz     .code:n = { \homework_import_tikz },
+    tikz     .value_forbidden: = true,
+    todo     .code:n = { \homework_import_todo },
+    todo     .value_forbidden: = true,
+    lang     .tl_set:N = { \l_homework_language_str },
+    lang     .initial:n = { english },
+    lang     .value_required:n = true,
 }
+
+\msg_new:nnnn { homework } { option } { option~#1~is~given } { loading~package~#2 }
 
 \cs_set_protected:Npn \homework_import_tikz {%
-    \ExplSyntaxOff
-    \RequirePackage{tikz}
-    \usetikzlibrary{%
-        , arrows.meta%
-        , calc%
-        , decorations.pathmorphing%
-        , decorations.pathreplacing%
-        , decorations.markings%
-        , decorations.shapes%
-        , decorations.text%
-        , intersections%
-        , shapes%
-        , snakes%
-    }
-    \ExplSyntaxOn
+    \msg_note:nnnn { homework } { option } { tikz } { tikz }
 }
 
-\ProcessKeysOptions { homework } % process the keys that were passed to us
+\cs_set_protected:Npn \homework_import_todo {%
+    \msg_note:nnnn { homework } { option } { todo } { zebra-goodies }
+}
 
 \LoadClass{scrartcl}
+
+\ProcessKeysOptions { homework } % process the keys that were passed to us
 
 \KOMAoption{fontsize}{4.2mm}
 \KOMAoption{DIV}{calc}
 \KOMAoption{headings}{standardclasses}
-
-\ExplSyntaxOff
-\RequirePackage[english]{babel}
-\ExplSyntaxOn
-
-%%% font and typesetting
-\RequirePackage{mathtools}
-\RequirePackage[regular]{newcomputermodern}
-\RequirePackage[final,babel=true]{microtype}
-\RequirePackage[english]{selnolig}
-\RequirePackage[all]{nowidow}% avoid widows and orphans
-\RequirePackage{csquotes}
-\RequirePackage{setspace}
-\RequirePackage{aligned-overset}% properly align \overset{}{} and \underset{}{}
-\RequirePackage{enumitem}% custom list numbering
-\RequirePackage{moreenum}% more options for list numbering
 
 %%% headers and footers
 \RequirePackage{scrlayer-scrpage}
@@ -107,24 +67,6 @@
 \predate{\begin{center}\large}
 \postdate{\end{center}}
 
-%%% references
-\RequirePackage%
-    [%
-    , unicode%
-    , pdfusetitle%
-    , hidelinks%
-    , final%
-    ]{hyperref}% interna%%% bibliography
-\RequirePackage%
-    [%
-    , style=ieee%
-    , autocite=inline%
-    , giveninits=true%
-    , bibencoding=utf-8%
-]{biblatex}
-
-%%% equation numbering
-
 \DeclareDocumentCommand {\theequation} {} {\thesection.\Alph{equation}}
 \DeclareDocumentCommand {\thesection} {} {Exercise~\arabic{section}.}
 
@@ -137,29 +79,6 @@
 % - counter: specify counter, if omitted, a counter named after the first argument is used; numberby: specify when to reset the counter, e. g. every chapter, section.
 
 \RequirePackage{amsthm}
-
-\newtheoremstyle{theoremdd} % name of the style to be used
-   {\topsep}               % measure of space to leave above the theorem. E.g.: 3pt
-   {\topsep}               % measure of space to leave below the theorem. E.g.: 3pt
-   {}                      % name of font to use in the body of the theorem
-   {0pt}                   % measure of space to indent
-   {}                      % name of head font
-   {.}                     % punctuation between head and body
-   {~}                     % space after theorem head; " " = normal interword space
-   {{\bfseries(\thmnumber{#2}) \thmname{#1}}\thmnote{ (#3)}}
-\theoremstyle{theoremdd}
-
-\theoremstyle{definition}
-\newtheorem{theorem}{Theorem}
-\newtheorem{definition}{Definition}
-\newtheorem{lemma}{Lemma}
-\newtheorem{proposition}{Proposition}
-\newtheorem{corollary}{Corollary}
-\newtheorem{notation}{Notation}
-\newtheorem{axiom}{Axiom}
-\newtheorem{remark}{Remark}
-\newtheorem{question}{Question}
-\newtheorem*{example}{Example}
 
 \newtheoremstyle{theoremex} % name of the style to be used
    {\topsep}               % measure of space to leave above the theorem. E.g.: 3pt
@@ -174,82 +93,3 @@
 \theoremstyle{theoremex}
 \newtheorem{exercise}{Part}[section]
 \DeclareDocumentCommand {\theexercise} {} {\alph{exercise}}
-
-% enumerations
-\newenvironment{enumr}{\begin{enumerate}[label=(\roman*)]}{\end{enumerate}} % enumerate with lowercase roman numerals
-\newenvironment{enumR}{\begin{enumerate}[label=(\Roman*)]}{\end{enumerate}} % enumerate with uppercase roman numerals
-\newenvironment{enuma}{\begin{enumerate}[label=(\alph*)]}{\end{enumerate}} % enumerate with lowercase latin letters
-\newenvironment{enumA}{\begin{enumerate}[label=(\Alph*)]}{\end{enumerate}} % enumerate with uppercase latin letters
-\newenvironment{enumg}{\begin{enumerate}[label=(\greek*)]}{\end{enumerate}} % enumerate with lowercase greek letters
-\newenvironment{enum}{\begin{enumerate}[label=(\arabic*)]}{\end{enumerate}} % enumerate with arabic numerals
-
-%% redefinition of the cases environment for enhanced text alignment
-\DeclareDocumentCommand {\case} { m m } {#1&#2\\}
-
-\DeclareDocumentCommand {\wrt} {} {w.\,r.\,t.\ }
-\DeclareDocumentCommand {\ie} {} {i.\,e.\ }
-\DeclareDocumentCommand {\Ie} {} {I.\,e.\ }
-\DeclareDocumentCommand {\eg} {} {e.\,g.\ }
-\DeclareDocumentCommand {\Eg} {} {E.\,g.\ }
-\DeclareDocumentCommand {\wolog} {} {w.\,o.\,l.\,o.\,g.\ }
-\DeclareDocumentCommand {\Wolog} {} {W.\,o.\,l.\,o.\,g.\ }
-
-%% math operators
-
-\DeclareDocumentCommand {\mult} {} {\mathbin{\cdot}}
-\DeclareDocumentCommand {\composition} {} {\mathbin{\circ}}
-\DeclareDocumentCommand {\defeq} {} {\mathrel{\coloneq}}
-\DeclareDocumentCommand {\defiff} {} {\mathrel{\vcentcolon\Leftrightarrow}}
-
-\DeclareDocumentCommand {\id} {} {\operatorname{id}}
-\DeclareDocumentCommand {\ker} {} {\operatorname{Ker}}
-\DeclareDocumentCommand {\coker} {} {\operatorname{Coker}}
-\DeclareDocumentCommand {\im} {} {\operatorname{Im}}
-\DeclareDocumentCommand {\hom} {} {\operatorname{Hom}}
-\DeclareDocumentCommand {\tor} {} {\operatorname{Tor}}
-\DeclareDocumentCommand {\rank} {} {\operatorname{rank}}
-\DeclareDocumentCommand {\real} {} {\symfrak{Re}}
-\DeclareDocumentCommand {\imag} {} {\symfrak{Im}}
-
-%% single letter names
-\DeclareDocumentCommand {\naturals} {} {\ensuremath{\symbb{N}}} % set of natural numbers
-\DeclareDocumentCommand {\naturalsless} {m} {\ensuremath{\naturals^{< #1}}}
-\DeclareDocumentCommand {\naturalsleq} {m} {\ensuremath{\naturals^{\leq #1}}}
-\DeclareDocumentCommand {\integers} {} {\ensuremath{\symbb{Z}}} % set of whole numbers
-\DeclareDocumentCommand {\rationals} {} {\ensuremath{\symbb{Q}}} % set of rational numbers
-\DeclareDocumentCommand {\reals} {} {\ensuremath{\symbb{R}}} % set of real numbers
-\DeclareDocumentCommand {\complex} {} {\ensuremath{\symbb{C}}}
-
-\DeclareDocumentCommand {\discup} {} {\mathbin{\sqcup}}
-\DeclareDocumentCommand {\bigdiscup} {} {\mathop{\bigsqcup}}
-
-\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
-\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
-\DeclarePairedDelimiter{\set}{\{}{\}}
-\DeclarePairedDelimiterX{\setc}[2]{\lbrace}{\rbrace}{#1\mathclose{}\;\delimsize|\;\mathopen{}#2}
-
-\DeclareDocumentCommand {\matrixinbase} {m m m} {[#1]\c_math_subscript_token{#2}^{#3}}
-\DeclareDocumentCommand {\bindots} {m} {#1\dotsb #1}
-\DeclareDocumentCommand {\coldots} {} {,\dotsc,}
-
-\providecommand*{\dual}{^{*}}
-\providecommand*{\transpose}{^{T}}
-
-
-\AtBeginDocument{
-%%% Fix symbols
-\title{\tl_use:N \l_homework_assignmentname_tl{}~\tl_use:N \l_homework_assignment_tl{}}
-\hypersetup{%
-, pdftitle={\thetitle{}~–~\tl_use:N \l_homework_course_tl{}}
-}
-
-\DeclareDocumentCommand {\phi} {} {\mupvarphi}
-\DeclareDocumentCommand {\epsilon} {} {\mupvarepsilon}
-\DeclareDocumentCommand {\theta} {} {\mupvartheta}
-\DeclareDocumentCommand {\rho} {} {\mupvarrho}
-
-\DeclareDocumentCommand {\varphi} {} {\mupphi}
-\DeclareDocumentCommand {\varepsilon} {} {\mupepsilon}
-\DeclareDocumentCommand {\vartheta} {} {\muptheta}
-\DeclareDocumentCommand {\varrho} {} {\muprho}
-}
