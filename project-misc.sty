@@ -1,0 +1,19 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesExplPackage{project-misc}{2023-11-06}{0.1}{Miscellaneous project related macros}
+\prop_gput:Nnn \g_msg_module_type_prop { project-misc } { Package }
+
+\RequirePackage{l3keys2e}
+
+\keys_define:nn { project-misc }
+{
+    todo     .code:n = { \homework_import_todo },
+    todo     .value_forbidden: = true,
+}
+
+\msg_new:nnnn { project-misc } { option } { option~#1~is~given } { loading~package~#2 }
+
+\cs_set_protected:Npn \homework_import_todo {%
+    \msg_note:nnnn { project-misc } { option } { todo } { zebra-goodies }
+    \RequirePackage{zebra-goodies}
+}
+
