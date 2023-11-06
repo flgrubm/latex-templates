@@ -7,12 +7,14 @@
 \keys_define:nn { project-misc }
 {
     todo     .code:n = { \homework_import_todo },
-    todo     .value_forbidden: = true,
+    todo     .value_forbidden:n = true,
 }
 
 \cs_set_protected:Npn \homework_import_todo {%
     \RequirePackage{zebra-goodies}
 }
+
+\ProcessKeysOptions { project-misc }
 
 %%% references
 \RequirePackage%

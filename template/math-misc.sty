@@ -1,13 +1,13 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesExplPackage{math-stuff}{2023-11-06}{0.1}{Generic math stuff}
-\prop_gput:Nnn \g_msg_module_type_prop { math-stuff } { Package }
+\ProvidesExplPackage{math-misc}{2023-11-06}{0.1}{Generic math stuff}
+\prop_gput:Nnn \g_msg_module_type_prop { math-misc } { Package }
 
 \RequirePackage{l3keys2e}
 
 \keys_define:nn { math-misc }
 {
     tikz     .code:n = { \homework_import_tikz },
-    tikz     .value_forbidden: = true,
+    tikz     .value_forbidden:n = true,
 }
 
 \cs_set_protected:Npn \homework_import_tikz {%

@@ -4,15 +4,15 @@
 
 \RequirePackage{l3keys2e}
 
-\cs_set_protected:Npn \homework_import_tikz { }
-\cs_set_protected:Npn \homework_import_todo { }
+\tl_set:Nn { \l_homework_import_tikz } {}
+\tl_set:Nn { \l_homework_import_todo } {}
 
 \keys_define:nn { homework }
 {
-    tikz     .code:n = { \cs_set_protected:Npn \homework_import_tikz { tikz } },
-    tikz     .value_forbidden: = true,
-    todo     .code:n = { \cs_set_protected:Npn \homework_import_todo { todo } },
-    todo     .value_forbidden: = true,
+    tikz     .code:n = { \tl_set:Nn { \l_homework_import_tikz } { tikz } },
+    tikz     .value_forbidden:n = true,
+    todo     .code:n = { \tl_set:Nn { \l_homework_import_todo } { todo } },
+    todo     .value_forbidden:n = true,
     lang     .tl_set:N = { \l_homework_language_str },
     lang     .initial:n = { english },
     lang     .value_required:n = true,
@@ -27,9 +27,9 @@
 \KOMAoption{headings}{standardclasses}
 
 %%% custom packages
-\RequirePackage{typesetting-misc}
-\RequirePackage{project-misc}
-\RequirePackage{math-mics}
+\RequirePackage[lang=\tl_use:N \l_homework_language_str]{typesetting-misc}
+\RequirePackage[\tl_use:N \l_homework_import_todo]{project-misc}
+\RequirePackage[\tl_use:N \l_homework_import_tikz]{math-misc}
 \RequirePackage{math-theorems}
 \RequirePackage{math-names}
 \RequirePackage{abbreviations}

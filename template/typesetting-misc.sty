@@ -18,14 +18,14 @@
 
 \keys_define:nn { typesetting-misc }
 {
-    lang     .tl_set:N = { \l_homework_language_str },
+    lang     .tl_set:N = { \l_typesettingmisc_language_str },
     lang     .initial:n = { english },
     lang     .value_required:n = true,
 }
 
 \ProcessKeysOptions { typesetting-misc } % process the keys that were passed to us
 
-\RequirePackage[\tl_use:N \l_homework_language_str]{babel}
+\RequirePackage[\tl_use:N \l_typesettingmisc_language_str]{babel}
 \RequirePackage{mathtools}
 \RequirePackage[regular]{newcomputermodern}
 \RequirePackage{microtype}
