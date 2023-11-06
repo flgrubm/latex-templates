@@ -1,0 +1,31 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesExplPackage{math-stuff}{2023-11-06}{0.1}{Generic math stuff}
+\prop_gput:Nnn \g_msg_module_type_prop { math-stuff } { Package }
+
+\RequirePackage{l3keys2e}
+
+\keys_define:nn { math-misc }
+{
+    tikz     .code:n = { \homework_import_tikz },
+    tikz     .value_forbidden: = true,
+}
+
+\cs_set_protected:Npn \homework_import_tikz {%
+    \ExplSyntaxOff
+    \RequirePackage{tikz}
+    \usetikzlibrary{%
+        , arrows.meta%
+        , calc%
+        , decorations.pathmorphing%
+        , decorations.pathreplacing%
+        , decorations.markings%
+        , decorations.shapes%
+        , decorations.text%
+        , intersections%
+        , shapes%
+        , snakes%
+    }
+    \ExplSyntaxOn
+}
+
+\ProcessKeysOptions { math-misc } % process the keys that were passed to us

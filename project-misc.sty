@@ -10,10 +10,23 @@
     todo     .value_forbidden: = true,
 }
 
-\msg_new:nnnn { project-misc } { option } { option~#1~is~given } { loading~package~#2 }
-
 \cs_set_protected:Npn \homework_import_todo {%
-    \msg_note:nnnn { project-misc } { option } { todo } { zebra-goodies }
     \RequirePackage{zebra-goodies}
 }
 
+%%% references
+\RequirePackage%
+    [%
+        , unicode%
+        , pdfusetitle%
+        , hidelinks%
+        , final%
+    ]{hyperref}%
+
+\RequirePackage%
+    [%
+        , style=ieee%
+        , autocite=inline%
+        , giveninits=true%
+        , bibencoding=utf-8%
+    ]{biblatex}

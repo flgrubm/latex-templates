@@ -4,25 +4,18 @@
 
 \RequirePackage{l3keys2e}
 
+\cs_set_protected:Npn \homework_import_tikz { }
+\cs_set_protected:Npn \homework_import_todo { }
+
 \keys_define:nn { homework }
 {
-    tikz     .code:n = { \homework_import_tikz },
+    tikz     .code:n = { \cs_set_protected:Npn \homework_import_tikz { tikz } },
     tikz     .value_forbidden: = true,
-    todo     .code:n = { \homework_import_todo },
+    todo     .code:n = { \cs_set_protected:Npn \homework_import_todo { todo } },
     todo     .value_forbidden: = true,
     lang     .tl_set:N = { \l_homework_language_str },
     lang     .initial:n = { english },
     lang     .value_required:n = true,
-}
-
-\msg_new:nnnn { homework } { option } { option~#1~is~given } { loading~package~#2 }
-
-\cs_set_protected:Npn \homework_import_tikz {%
-    \msg_note:nnnn { homework } { option } { tikz } { tikz }
-}
-
-\cs_set_protected:Npn \homework_import_todo {%
-    \msg_note:nnnn { homework } { option } { todo } { zebra-goodies }
 }
 
 \LoadClass{scrartcl}
@@ -32,6 +25,14 @@
 \KOMAoption{fontsize}{4.2mm}
 \KOMAoption{DIV}{calc}
 \KOMAoption{headings}{standardclasses}
+
+%%% custom packages
+\RequirePackage{typesetting-misc}
+\RequirePackage{project-misc}
+\RequirePackage{math-mics}
+\RequirePackage{math-theorems}
+\RequirePackage{math-names}
+\RequirePackage{abbreviations}
 
 %%% headers and footers
 \RequirePackage{scrlayer-scrpage}
@@ -70,14 +71,7 @@
 \DeclareDocumentCommand {\theequation} {} {\thesection.\Alph{equation}}
 \DeclareDocumentCommand {\thesection} {} {Exercise~\arabic{section}.}
 
-% --------------------------------------------------
-
-%% custom environments
-
-% theorems
-% - syntax: \newtheorem{name}[counter]{Printed output}[numberby]
-% - counter: specify counter, if omitted, a counter named after the first argument is used; numberby: specify when to reset the counter, e. g. every chapter, section.
-
+%%% theorem environments
 \RequirePackage{amsthm}
 
 \newtheoremstyle{theoremex} % name of the style to be used
@@ -93,3 +87,10 @@
 \theoremstyle{theoremex}
 \newtheorem{exercise}{Part}[section]
 \DeclareDocumentCommand {\theexercise} {} {\alph{exercise}}
+
+\AtBeginDocument{
+    \title{\tl_use:N \l_homework_assignmentname_tl{}~\tl_use:N \l_homework_assignment_tl{}}
+    \hypersetup{%
+        , pdftitle={\thetitle{}~–~\tl_use:N \l_homework_course_tl{}}
+    }
+}

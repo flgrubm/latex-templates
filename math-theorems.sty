@@ -1,0 +1,34 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesExplPackage{math-theorems}{2023-11-06}{0.1}{Math Theorem Environments}
+\prop_gput:Nnn \g_msg_module_type_prop { math-theorems } { Package }
+
+%% custom environments
+
+% theorems
+% - syntax: \newtheorem{name}[counter]{Printed output}[numberby]
+% - counter: specify counter, if omitted, a counter named after the first argument is used; numberby: specify when to reset the counter, e. g. every chapter, section.
+
+\RequirePackage{amsthm}
+
+\newtheoremstyle{math-theorems} % name of the style to be used
+   {\topsep}               % measure of space to leave above the theorem. E.g.: 3pt
+   {\topsep}               % measure of space to leave below the theorem. E.g.: 3pt
+   {}                      % name of font to use in the body of the theorem
+   {0pt}                   % measure of space to indent
+   {}                      % name of head font
+   {.}                     % punctuation between head and body
+   {~}                     % space after theorem head; " " = normal interword space
+   {{\bfseries(\thmnumber{#2}) \thmname{#1}}\thmnote{ (#3)}}
+\theoremstyle{math-thereorems}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{notation}{Notation}
+\newtheorem{axiom}{Axiom}
+\newtheorem{remark}{Remark}
+\newtheorem{question}{Question}
+\newtheorem*{example}{Example}

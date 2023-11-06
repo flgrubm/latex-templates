@@ -1,0 +1,60 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesExplPackage{typesetting-misc}{2023-11-06}{0.1}{Miscellaneous typesetting}
+\prop_gput:Nnn \g_msg_module_type_prop { typesetting-misc } { Package }
+
+%%% TeX engine check
+\RequirePackage{iftex}
+
+%%% abort if not LuaLaTeX or XeLaTeX
+\msg_new:nnnn { typesetting-misc } { compiler-compatibility } { Incompatible~compiler~detected! } { Please~use~either~LuaLaTeX~or~XeLaTeX }
+\ifluatex{}
+\else\ifxetex{}
+\else
+\msg_fatal:nn { typesetting-misc } { compiler-compatibility }
+\fi
+\fi
+
+\RequirePackage{l3keys2e}
+
+\keys_define:nn { typesetting-misc }
+{
+    lang     .tl_set:N = { \l_homework_language_str },
+    lang     .initial:n = { english },
+    lang     .value_required:n = true,
+}
+
+\ProcessKeysOptions { typesetting-misc } % process the keys that were passed to us
+
+\RequirePackage[\tl_use:N \l_homework_language_str]{babel}
+\RequirePackage{mathtools}
+\RequirePackage[regular]{newcomputermodern}
+\RequirePackage{microtype}
+\microtypesetup{babel=true}
+\RequirePackage[english]{selnolig}
+\RequirePackage[all]{nowidow}% avoid widows and orphans
+\RequirePackage{csquotes}
+\RequirePackage{setspace}
+\RequirePackage{aligned-overset}% properly align \overset{}{} and \underset{}{}
+\RequirePackage{enumitem}% custom list numbering
+\RequirePackage{moreenum}% more options for list numbering
+
+% enumerations
+\newenvironment{enumr}{\begin{enumerate}[label=(\roman*)]}{\end{enumerate}} % enumerate with lowercase roman numerals
+\newenvironment{enumR}{\begin{enumerate}[label=(\Roman*)]}{\end{enumerate}} % enumerate with uppercase roman numerals
+\newenvironment{enuma}{\begin{enumerate}[label=(\alph*)]}{\end{enumerate}} % enumerate with lowercase latin letters
+\newenvironment{enumA}{\begin{enumerate}[label=(\Alph*)]}{\end{enumerate}} % enumerate with uppercase latin letters
+\newenvironment{enumg}{\begin{enumerate}[label=(\greek*)]}{\end{enumerate}} % enumerate with lowercase greek letters
+\newenvironment{enum}{\begin{enumerate}[label=(\arabic*)]}{\end{enumerate}} % enumerate with arabic numerals
+
+%%% fix symbols
+\AtBeginDocument{
+    \DeclareDocumentCommand {\phi} {} {\mupvarphi}
+    \DeclareDocumentCommand {\epsilon} {} {\mupvarepsilon}
+    \DeclareDocumentCommand {\theta} {} {\mupvartheta}
+    \DeclareDocumentCommand {\rho} {} {\mupvarrho}
+
+    \DeclareDocumentCommand {\varphi} {} {\mupphi}
+    \DeclareDocumentCommand {\varepsilon} {} {\mupepsilon}
+    \DeclareDocumentCommand {\vartheta} {} {\muptheta}
+    \DeclareDocumentCommand {\varrho} {} {\muprho}
+}
