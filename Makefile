@@ -1,8 +1,8 @@
 .PHONY: default debug clean clean-default clean-debug purge
 
 NAME = project
-TEMPLATE_DIR = template
 TEX_FILE = index.tex
+TEMPLATE_DIR = template
 
 ##########
 
