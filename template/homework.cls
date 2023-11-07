@@ -22,7 +22,7 @@
 %%
 %%   \course{<course name>}
 %%   \assignment{<assignment number>}
-%%   \assignmentname{<name of assignment>}% this is defaults to `Assignment`
+%%   \assignmentname{<name of assignment>}% this defaults to `Assignment`
 %%
 %%   \author{<author name>}
 %%
