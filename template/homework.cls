@@ -13,7 +13,20 @@
 %%   A copy of the GNU General Public License can be found in `COPYING`.
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesExplClass{homework}{2023-11-04}{0.1}{Class for writing math homeworks}
+\ProvidesExplClass{homework}{2023-11-07}{0.2}{Class for writing math homeworks}
+
+%%
+%%   Usage:
+%%
+%%   \documentclass{homework}
+%%
+%%   \course{<course name>}
+%%   \assignment{<assignment number>}
+%%   \assignmentname{<name of assignment>}% this is defaults to `Assignment`
+%%
+%%   \author{<author name>}
+%%
+
 \prop_gput:Nnn \g_msg_module_type_prop { homework } { Class }
 
 \RequirePackage{l3keys2e}

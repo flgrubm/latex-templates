@@ -8,7 +8,7 @@
 
 ## Standard Usage
 
-Rename your main LaTeX file to `index.tex`, move it to the project folder root and copy the folder `template` into the project folder root as well. In `index.tex`, load the desired class (without the path `template` and without the filename extension `.cls`). You can remove class and package files that are not needed. Be careful when removing package files, they might be required by the class in use.
+Rename your main LaTeX file to `index.tex`, move it to the project folder root and copy the folder `template` into the project folder root as well. In `index.tex`, load the desired class (without the path `template` and without the filename extension `.cls`). You can remove class and package files that are not needed. Be careful when removing package files, they might be required by the class in use. Please refer to the top of the class file for the detailed usage of this class.
 
 ### On a local computer with the GNU make
 
