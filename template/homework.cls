@@ -95,8 +95,8 @@
 \predate{\begin{center}\large}
 \postdate{\end{center}}
 
-\DeclareDocumentCommand {\theequation} {} {\thesection.\Alph{equation}}
-\DeclareDocumentCommand {\thesection} {} {Exercise~\arabic{section}.}
+\renewcommand*{\theequation}{\Alph{equation}}
+\renewcommand*{\thesection}{Exercise~\arabic{section}.}
 
 %%% theorem environments
 \RequirePackage{amsthm}
@@ -112,8 +112,15 @@
    {{\bfseries\thmname{#1}~(\thmnumber{#2})}\thmnote{ (#3)}}
 
 \theoremstyle{theoremex}
-\newtheorem{exercise}{Part}[section]
-\DeclareDocumentCommand {\theexercise} {} {\alph{exercise}}
+\newtheorem{exaux}{Part}[section]
+
+\NewDocumentEnvironment{exercise}{o}
+ {\IfNoValueTF{#1}
+   {\exaux\addcontentsline{toc}{subsection}{Part~(\protect\alph{exaux})}}
+   {\exaux[#1]\addcontentsline{toc}{subsection}{Part~(\protect\alph{exaux})~(#1)}}%
+   \ignorespaces}
+ {\endexaux}
+\renewcommand*{\theexaux}{\alph{exaux}}
 
 \AtBeginDocument{
     \title{\tl_use:N \l_homework_assignmentname_tl{}~\tl_use:N \l_homework_assignment_tl{}}
