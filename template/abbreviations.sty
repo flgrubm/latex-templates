@@ -16,11 +16,11 @@
 \ProvidesExplPackage{abbreviations}{2023-11-06}{0.1}{Helpful abbreviations}
 \prop_gput:Nnn \g_msg_module_type_prop { abbreviations } { Package }
 
-\DeclareDocumentCommand {\wrt} {} {w.\,r.\,t.\ }
-\DeclareDocumentCommand {\Wrt} {} {W.\,r.\,t.\ }
-\DeclareDocumentCommand {\ie} {} {i.\,e.\ }
-\DeclareDocumentCommand {\Ie} {} {I.\,e.\ }
-\DeclareDocumentCommand {\eg} {} {e.\,g.\ }
-\DeclareDocumentCommand {\Eg} {} {E.\,g.\ }
-\DeclareDocumentCommand {\wolog} {} {w.\,o.\,l.\,o.\,g.\ }
-\DeclareDocumentCommand {\Wolog} {} {W.\,o.\,l.\,o.\,g.\ }
+\DeclareDocumentCommand {\wrt} {s} {\IfBooleanTF#1{w.\,r.\,t.}{w.\,r.\,t.\ }}
+\DeclareDocumentCommand {\Wrt} {s} {\IfBooleanTF#1{W.\,r.\,t.}{W.\,r.\,t.\ }}
+\DeclareDocumentCommand {\ie} {s} {\IfBooleanTF#1{i.\,e.}{i.\,e.\ }}
+\DeclareDocumentCommand {\Ie} {s} {\IfBooleanTF#1{I.\,e.}{I.\,e.\ }}
+\DeclareDocumentCommand {\eg} {s} {\IfBooleanTF#1{e.\,g.}{e.\,g.\ }}
+\DeclareDocumentCommand {\Eg} {s} {\IfBooleanTF#1{E.\,g.}{E.\,g.\ }}
+\DeclareDocumentCommand {\wolog} {s} {\IfBooleanTF#1{w.\,o.\,l.\,o.\,g.}{w.\,o.\,l.\,o.\,g.\ }}
+\DeclareDocumentCommand {\Wolog} {s} {\IfBooleanTF#1{W.\,o.\,l.\,o.\,g.}{W.\,o.\,l.\,o.\,g.\ }}
