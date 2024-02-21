@@ -1,4 +1,4 @@
-# latex-classes
+# latex-templates
 
 ## Available Document Classes
 
