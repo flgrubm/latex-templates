@@ -1,5 +1,10 @@
 # latex-classes
 
+## Available Document Classes
+
+- **marticle**: maths articles
+- **homework**: maths related homework
+
 ## Files
 
 - `template/` contains the class files (filename extension `.cls`) and the package files (filename extension `.sty`). Include them as desired. Note that the classes already load most of the packages, so there is generally no need to include the packages separately in your LaTeX file.
