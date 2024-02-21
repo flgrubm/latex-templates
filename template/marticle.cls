@@ -149,7 +149,7 @@
 
 \AtBeginDocument{%
     \hypersetup{%
-        , pdftitle={\tl_use:N \l_marticle_titleHyper_tl {}~–~\tl_use:N \l_marticle_subtitleHyper_tl {}}%
+        , pdftitle={\tl_use:N \l_marticle_titleHyper_tl {}\tl_if_novalue:NF \l_marticle_subtitleHyper_tl {~–~\tl_use:N \l_marticle_subtitleHyper_tl {}}}%
         , pdfkeywords={\tl_use:N \l_marticle_keywordsHyper_tl {}}%
         , pdfauthor={\tl_use:N \l_marticle_authorHyper_tl {}}%
     }%
