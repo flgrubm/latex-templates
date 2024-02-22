@@ -4,6 +4,7 @@
 
 - **marticle**: maths articles
 - **homework**: maths related homework
+- **thesis**: maths related thesis
 
 ## Files
 
