@@ -5,74 +5,101 @@ NAME = project
 MAIN_TEX = index.tex
 BIB_FILE =
 TEMPLATE_DIR = template
+INCLUDE_DIRS = chapters
 ADDITIONAL_SOURCES =
 
 # choose from `lualatex` and `xelatex`
-DEFAULT = xelatex
-RELEASE = lualatex
+COMPILER_DEFAULT = xelatex
+COMPILER_RELEASE = lualatex
+COMPILER_DEBUG   = xelatex
 
 
 #### INTERNAL
+# proceed at your own risk
 
-VERSIONS = xelatex lualatex debug-xelatex debug-lualatex
-export COMPILER =
-export DEBUG =
+## Constants
 
-.PHONY: default release $(VERSIONS) $(foreach version,$(VERSIONS),clean-$(version)) clean-default clean-release $(foreach version,$(VERSIONS),clean-pdf-$(version)) clean-pdf-default clean-pdf-release clean purge
+COMPILE_MODES = default debug
+COMPILERS     = xelatex lualatex
+SVERSIONS     = $(foreach mode,$(COMPILE_MODES),$(foreach compiler,$(COMPILERS),$(mode)-$(compiler)))
+NVERSIONS     = default debug $(SVERSIONS)
+VERSIONS      = release $(NVERSIONS)
 
-## COMPILATION
+ifdef TEMPLATE_DIR
+    TEMPLATE_SOURCES =  $(wildcard $(TEMPLATE_DIR)/*.cls)
+    TEMPLATE_SOURCES += $(wildcard $(TEMPLATE_DIR)/*.sty)
+endif
 
-default: $(DEFAULT)
-	mv target/$(DEFAULT).pdf target/default.pdf
+INCLUDE_DIR_SOURCES = $(foreach dir,$(INCLUDE_DIRS),$(wildcard $(dir)/*.tex))
+SOURCES             = $(MAIN_TEX) $(BIB_FILE) $(LATEXMKRC) $(TEMPLATE_SOURCES) $(INCLUDE_DIR_SOURCES) $(ADDITIONAL_SOURCES)
 
-release: clean-release clean-pdf-release | $(RELEASE)
-	mv target/$(RELEASE).pdf target/$(NAME).pdf
+ifdef TEMPLATE_SOURCES
+    LATEXMKRC = latexmkrc
+endif
 
-xelatex: COMPILER = xelatex
-lualatex: COMPILER = lualatex
+LATEXMKRC_CONTENT = $(if $(TEMPLATE_DIR),"\$$ENV{'TEXINPUTS'}='./$(TEMPLATE_DIR):' . \$$ENV{'TEXINPUTS'};",)
 
-debug-xelatex: COMPILER = xelatex
-debug-xelatex: DEBUG = 1
-debug-lualatex: COMPILER = lualatex
-debug-lualatex: DEBUG = 1
+## Initialization
 
-$(foreach version,$(VERSIONS),target/$(version).pdf): target/%.pdf: target/%/out.pdf
-	cp -f $< $@
+.PHONY: $(VERSIONS) xelatex lualatex $(foreach version,$(VERSIONS),clean-$(version)) $(foreach version,$(VERSIONS),cleanpdf-$(version)) clean cleanpdf purge
 
-$(foreach version,$(VERSIONS),target/$(version)/out.pdf): target/%/out.pdf: target/% $(MAIN_TEX) $(BIB_FILE) $(ADDITIONAL_SOURCES) $(TEMPLATE_DIR) $(if $(TEMPLATE_DIR),latexmkrc,)
-	latexmk -$(COMPILER) -$(if $(DEBUG),gg,quiet) -jobname=out -output-directory=target/$* $(MAIN_TEX)
+## Main build target initialization
+
+default: COMPILER = $(COMPILER_DEFAULT)
+release: COMPILER = $(COMPILER_RELEASE)
+debug:   COMPILER = $(COMPILER_DEBUG)
+
+default: target/default.pdf
+
+release: clean-release cleanpdf-release | target/$(NAME).pdf
+target/$(NAME).pdf: target/release.pdf
+	mv $< $@
+
+debug: DEBUG = 1
+debug: clean-debug cleanpdf-debug | target/debug.pdf
+
+$(foreach mode,$(COMPILE_MODES),$(mode)-xelatex): COMPILER = xelatex
+$(foreach mode,$(COMPILE_MODES),$(mode)-lualatex): COMPILER = lualatex
+$(foreach compiler,$(COMPILERS),debug-$(compiler)): DEBUG = 1
+
+$(foreach sversion,$(SVERSIONS),$(sversion)): %: target/%.pdf
+
+xelatex:  default-xelatex
+lualatex: default-lualatex
+
+## Compilation
 
 $(foreach version,$(VERSIONS),target/$(version)):
 	mkdir -p $@
 
-$(foreach version,$(VERSIONS),$(version)): %: target/%.pdf
+$(foreach version,$(VERSIONS),$(foreach dir,$(INCLUDE_DIRS),target/$(version)/$(dir))):
+	mkdir -p $@
 
-## LATEXMK CONFIGURATION
+$(foreach version,$(VERSIONS),target/$(version).pdf): target/%.pdf: target/%/out.pdf
+	cp -f $< $@
 
-# add TEMPLATE_DIR to path if it exists
-LATEXMKRC_CONTENT = $(if $(TEMPLATE_DIR),"\$$ENV{'TEXINPUTS'}='./$(TEMPLATE_DIR):' . \$$ENV{'TEXINPUTS'};",)
+$(foreach version,$(VERSIONS),target/$(version)/out.pdf): %/out.pdf: % $(foreach dir,$(INCLUDE_DIRS),%/$(dir)) $(SOURCES)
+	latexmk -$(COMPILER) -$(if $(DEBUG),gg,quiet) -jobname=out -output-directory=$* $(MAIN_TEX)
+
+## latexmkrc
 
 latexmkrc:
 	echo $(LATEXMKRC_CONTENT) > latexmkrc
 
-## CLEAN
+## Cleanup
 
 $(foreach version,$(VERSIONS),clean-$(version)): clean-%:
 	$(RM) -r target/$*
 
-clean-default: clean-$(DEFAULT)
-clean-release: clean-$(RELEASE)
+$(foreach version,$(NVERSIONS),cleanpdf-$(version)): cleanpdf-%:
+	$(RM) target/$*.pdf
 
-$(foreach version,$(VERSIONS),clean-pdf-$(version)): clean-pdf-%:
-	$(RM) -r target/$*.pdf
-
-clean-pdf-default:
-	$(RM) target/default.pdf
-
-clean-pdf-release:
+cleanpdf-release:
 	$(RM) target/$(NAME).pdf
 
 clean: $(foreach version,$(VERSIONS),clean-$(version))
+
+cleanpdf: $(foreach version,$(VERSIONS),cleanpdf-$(version))
 
 purge: clean
 	$(RM) -r target
