@@ -1,4 +1,4 @@
-%%   Copyright (C) 2023 Fabian Lukas Grubmüller
+%%   Copyright (C) 2023-2024 Fabian Lukas Grubmüller
 %%
 %%   This program is free software: you can redistribute it and/or modify
 %%   it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
 %%   A copy of the GNU General Public License can be found in `COPYING`.
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesExplClass{thesis}{2023-11-20}{0.1}{Class for writing math theses}
+\ProvidesExplClass{thesis}{2024-02-25}{0.2}{Class for writing math theses}
 
 %%
 %%   Usage:
@@ -23,6 +23,9 @@
 %%   \mtitle[<plain title>]{<title>}
 %%   \msubtitle[<plain subtitle>]{<subtitle>}
 %%   \mauthor[<plain author>]{<author name>}
+%%   \institute{<institute name>}
+%%   \thesistype{<thesis type>}% e.g. "Master Thesis"
+%%   \supervisor{<supervisor name>}
 %%
 %%   \keywords[<plain keywords>]{<keywords>}
 %%   \date{<date>}% defaults to current date
