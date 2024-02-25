@@ -60,6 +60,7 @@
 \RequirePackage{math-theorems}
 \RequirePackage{math-names}
 \RequirePackage{abbreviations}
+\RequirePackage{local}
 
 %%% headers and footers
 \RequirePackage{scrlayer-scrpage}
